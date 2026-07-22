@@ -1,0 +1,44 @@
+{
+  "name": "material-shortage-agent",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "@sap/cds": "^10",
+    "@sap-cloud-sdk/connectivity": "^4",
+    "@sap-cloud-sdk/http-client": "^4",
+    "@sap-cloud-sdk/resilience": "^4"
+  },
+  "devDependencies": {
+    "@cap-js/sqlite": "^3",
+    "@cap-js/cds-types": "^0.18.0",
+    "@types/node": "^24.0.0",
+    "tsx": "^4",
+    "typescript": "^7.0.0",
+    "@cap-js/cds-typer": ">=0.1"
+  },
+  "scripts": {
+    "start": "cds-serve"
+  },
+  "private": true,
+  "imports": {
+    "#cds-models/*": "./@cds-models/*/index.js"
+  },
+  "cds": {
+    "requires": {
+      "API_MATERIAL_STOCK_SRV": {
+        "kind": "odata-v2",
+        "model": "srv/external/API_MATERIAL_STOCK_SRV",
+        "credentials": {
+          "url": "https://sandbox.api.sap.com/s4hanacloud/sap/opu/odata/sap/API_MATERIAL_STOCK_SRV"
+        }
+      },
+      "API_PRODUCTION_ORDER_2_SRV": {
+        "kind": "odata-v2",
+        "model": "srv/external/API_PRODUCTION_ORDER_2_SRV",
+        "credentials": {
+          "url": "https://sandbox.api.sap.com/s4hanacloud/sap/opu/odata/sap/API_PRODUCTION_ORDER_2_SRV"
+        }
+      }
+    }
+  }
+}

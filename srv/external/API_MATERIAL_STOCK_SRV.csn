@@ -1,0 +1,308 @@
+{
+ "meta": {
+  "creator": "cds-dk 10.0.5"
+ },
+ "$version": "2.0",
+ "definitions": {
+  "API_MATERIAL_STOCK_SRV": {
+   "kind": "service",
+   "@cds.external": true,
+   "@m.IsDefaultEntityContainer": "true",
+   "@sap.message.scope.supported": "true",
+   "@sap.supported.formats": "atom json xlsx"
+  },
+  "API_MATERIAL_STOCK_SRV.A_MaterialSerialNumber": {
+   "kind": "entity",
+   "@cds.external": true,
+   "@cds.persistence.skip": true,
+   "@sap.creatable": "false",
+   "@sap.updatable": "false",
+   "@sap.deletable": "false",
+   "@sap.content.version": "1",
+   "@sap.label": "Serial Numbers with Material Stock",
+   "elements": {
+    "Material": {
+     "key": true,
+     "type": "cds.String",
+     "length": 40,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "Material",
+     "@sap.quickinfo": "Material Number",
+     "notNull": true
+    },
+    "SerialNumber": {
+     "key": true,
+     "type": "cds.String",
+     "length": 18,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "Serial Number",
+     "notNull": true
+    },
+    "Plant": {
+     "type": "cds.String",
+     "length": 4,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "Plant"
+    },
+    "StorageLocation": {
+     "type": "cds.String",
+     "length": 4,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "Storage Location"
+    },
+    "InventorySpecialStockType": {
+     "type": "cds.String",
+     "length": 1,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "Special Stock",
+     "@sap.quickinfo": "Special Stock Indicator"
+    },
+    "Batch": {
+     "type": "cds.String",
+     "length": 10,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "Stock batch",
+     "@sap.quickinfo": "Batch Number"
+    },
+    "InventoryStockType": {
+     "type": "cds.String",
+     "length": 2,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "Stock Type",
+     "@sap.quickinfo": "Stock Type of Goods Movement (Primary Posting)"
+    },
+    "Equipment": {
+     "type": "cds.String",
+     "length": 18,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "Equipment",
+     "@sap.quickinfo": "Equipment Number"
+    },
+    "Customer": {
+     "type": "cds.String",
+     "length": 10,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "Spec. stock customer",
+     "@sap.quickinfo": "Special stock customer account number"
+    },
+    "Supplier": {
+     "type": "cds.String",
+     "length": 10,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "Special stock vendor",
+     "@sap.quickinfo": "Account number of the vendor"
+    },
+    "SDDocument": {
+     "type": "cds.String",
+     "length": 10,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "Sales Order",
+     "@sap.quickinfo": "Sales Order Number"
+    },
+    "SDDocumentItem": {
+     "type": "cds.String",
+     "length": 6,
+     "@sap.display.format": "NonNegative",
+     "@sap.label": "Sales Order Item",
+     "@sap.quickinfo": "Item Number in Sales Order"
+    },
+    "WBSElementInternalID": {
+     "type": "cds.String",
+     "length": 8,
+     "@sap.display.format": "NonNegative",
+     "@sap.label": "WBS Internal ID",
+     "@sap.quickinfo": "WBS Element"
+    },
+    "WBSElementExternalID": {
+     "type": "cds.String",
+     "length": 24,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "WBS Element",
+     "@sap.quickinfo": "Work Breakdown Structure Element (WBS Element) Edited"
+    },
+    "to_MatlStkInAcctMod": {
+     "type": "cds.Association",
+     "target": "API_MATERIAL_STOCK_SRV.A_MatlStkInAcctMod",
+     "cardinality": {
+      "max": "*"
+     },
+     "keys": []
+    }
+   }
+  },
+  "API_MATERIAL_STOCK_SRV.A_MaterialStock": {
+   "kind": "entity",
+   "@cds.external": true,
+   "@cds.persistence.skip": true,
+   "@sap.creatable": "false",
+   "@sap.updatable": "false",
+   "@sap.deletable": "false",
+   "@sap.content.version": "1",
+   "@sap.label": "Material Master",
+   "elements": {
+    "Material": {
+     "key": true,
+     "type": "cds.String",
+     "length": 40,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "Material",
+     "@sap.quickinfo": "Material Number",
+     "notNull": true
+    },
+    "MaterialBaseUnit": {
+     "type": "cds.String",
+     "length": 3,
+     "@sap.label": "Base Unit of Measure",
+     "@sap.semantics": "unit-of-measure"
+    },
+    "to_MatlStkInAcctMod": {
+     "type": "cds.Association",
+     "target": "API_MATERIAL_STOCK_SRV.A_MatlStkInAcctMod",
+     "cardinality": {
+      "max": "*"
+     },
+     "keys": []
+    }
+   }
+  },
+  "API_MATERIAL_STOCK_SRV.A_MatlStkInAcctMod": {
+   "kind": "entity",
+   "@cds.external": true,
+   "@cds.persistence.skip": true,
+   "@sap.creatable": "false",
+   "@sap.updatable": "false",
+   "@sap.deletable": "false",
+   "@sap.content.version": "1",
+   "@sap.label": "Material Stock",
+   "elements": {
+    "Material": {
+     "key": true,
+     "type": "cds.String",
+     "length": 40,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "Material for Stock Mamangement",
+     "notNull": true
+    },
+    "Plant": {
+     "key": true,
+     "type": "cds.String",
+     "length": 4,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "Plant",
+     "notNull": true
+    },
+    "StorageLocation": {
+     "key": true,
+     "type": "cds.String",
+     "length": 4,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "Storage Location",
+     "notNull": true
+    },
+    "Batch": {
+     "key": true,
+     "type": "cds.String",
+     "length": 10,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "Batch SID",
+     "@sap.quickinfo": "Batch Number (Stock Identifier)",
+     "notNull": true
+    },
+    "Supplier": {
+     "key": true,
+     "type": "cds.String",
+     "length": 10,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "Supplier SID",
+     "@sap.quickinfo": "Supplier for Special Stock",
+     "notNull": true
+    },
+    "Customer": {
+     "key": true,
+     "type": "cds.String",
+     "length": 10,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "Customer SID",
+     "@sap.quickinfo": "Customer for Special Stock",
+     "notNull": true
+    },
+    "WBSElementInternalID": {
+     "key": true,
+     "type": "cds.String",
+     "length": 8,
+     "@sap.display.format": "NonNegative",
+     "@sap.label": "WBS Internal ID",
+     "@sap.quickinfo": "WBS Element",
+     "notNull": true
+    },
+    "SDDocument": {
+     "key": true,
+     "type": "cds.String",
+     "length": 10,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "Sales Order",
+     "@sap.quickinfo": "Sales Order Number of Valuated Sales Order Stock",
+     "notNull": true
+    },
+    "SDDocumentItem": {
+     "key": true,
+     "type": "cds.String",
+     "length": 6,
+     "@sap.display.format": "NonNegative",
+     "@sap.label": "Sales Order Item",
+     "@sap.quickinfo": "Sales Order Item of Valuated Sales Order Stock",
+     "notNull": true
+    },
+    "InventorySpecialStockType": {
+     "key": true,
+     "type": "cds.String",
+     "length": 1,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "Special Stock Type",
+     "notNull": true
+    },
+    "InventoryStockType": {
+     "key": true,
+     "type": "cds.String",
+     "length": 2,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "Stock Type",
+     "@sap.quickinfo": "Stock Type of Goods Movement (Stock Identifier)",
+     "notNull": true
+    },
+    "WBSElementExternalID": {
+     "type": "cds.String",
+     "length": 24,
+     "@sap.display.format": "UpperCase",
+     "@sap.label": "WBS Element",
+     "@sap.quickinfo": "Work Breakdown Structure Element (WBS Element) Edited"
+    },
+    "MaterialBaseUnit": {
+     "type": "cds.String",
+     "length": 3,
+     "@sap.label": "Base Unit of Measure",
+     "@sap.semantics": "unit-of-measure"
+    },
+    "MatlWrhsStkQtyInMatlBaseUnit": {
+     "type": "cds.Decimal",
+     "precision": 31,
+     "scale": 14,
+     "@sap.unit": "MaterialBaseUnit"
+    },
+    "to_MaterialSerialNumber": {
+     "type": "cds.Association",
+     "target": "API_MATERIAL_STOCK_SRV.A_MaterialSerialNumber",
+     "cardinality": {
+      "max": "*"
+     },
+     "keys": []
+    },
+    "to_MaterialStock": {
+     "type": "cds.Association",
+     "target": "API_MATERIAL_STOCK_SRV.A_MaterialStock",
+     "keys": []
+    }
+   }
+  }
+ }
+}

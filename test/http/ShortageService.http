@@ -1,0 +1,18 @@
+@port=4004
+@server=http://localhost:{{port}}
+@username=alice
+@password=
+
+
+### Materials
+# @name Materials_GET
+GET {{server}}/odata/v4/shortage/Materials?$expand=productionOrders
+Authorization: Basic {{username}}:{{password}}
+
+
+
+
+### ProductionOrders
+# @name ProductionOrders_GET
+GET {{server}}/odata/v4/shortage/ProductionOrders
+Authorization: Basic {{username}}:{{password}}
