@@ -10,6 +10,12 @@ GET {{server}}/odata/v4/shortage/Materials
 Authorization: Basic {{username}}:{{password}}
 
 
+### MaterialDescriptions
+# @name MaterialDescriptions_GET
+GET {{server}}/odata/v4/shortage/Materials?$expand=to_Description&$top=5
+Authorization: Basic {{username}}:{{password}}
+
+
 
 
 ### ProductionOrders

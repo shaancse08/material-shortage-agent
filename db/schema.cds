@@ -11,7 +11,7 @@ using {API_PRODUCTION_ORDER_2_SRV as ProdOrderExt} from '../srv/external/API_PRO
 using {API_PRODUCT_SRV as ProductExt} from '../srv/external/API_PRODUCT_SRV';
 
 
-entity Materials        as
+entity Materials           as
     projection on ProductExt.A_Product {
         Product,
         CreationDate,
@@ -19,8 +19,23 @@ entity Materials        as
         ProductGroup,
         to_Valuation,
         to_ProductProcurement,
-        to_Description
+        @cds.odata.navigable
+        to_Description : Association to MaterialDescription
+                             on to_Description.Product = Product
     }
+
+/**
+ * Material description in a given language. This is a separate entity because S/4's product master data is multi-lingual, and the API_PRODUCT_SRV service returns one row per language.
+ * The ShortageService service will typically query this entity with a filter on Language = 'EN
+ */
+entity MaterialDescription as
+    projection on ProductExt.A_ProductDescription {
+        ProductDescription,
+        Product,
+        Language
+    }
+    where
+        Language = 'EN';
 
 /**
  * Local materials master — supplements remote S/4 stock data with things
@@ -29,7 +44,7 @@ entity Materials        as
  * Actual quantities-on-hand come from the remote API_MATERIAL_STOCK_SRV service,
  * NOT from this entity — this is deliberately not a stock duplicate.
  */
-entity MaterialStock    as
+entity MaterialStock       as
     projection on MaterialExt.A_MatlStkInAcctMod {
         Material,
         Plant,
@@ -58,7 +73,7 @@ entity MaterialStock    as
  * this is what makes shortage escalation realistic: one order can be fine on
  * 4 components and short on the 5th.
  */
-entity ProductionOrders as
+entity ProductionOrders    as
     projection on ProdOrderExt.A_ProductionOrder_2 {
         ManufacturingOrder,
         Material,
