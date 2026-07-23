@@ -1,4 +1,4 @@
-import cds from "@sap/cds";
+import cds, { Request } from "@sap/cds";
 export default class ShortageService extends cds.ApplicationService {
   async init() {
     const stock = await cds.connect.to("API_MATERIAL_STOCK_SRV");
