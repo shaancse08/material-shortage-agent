@@ -8,6 +8,19 @@ using {
 
 using {API_MATERIAL_STOCK_SRV as MaterialExt} from '../srv/external/API_MATERIAL_STOCK_SRV';
 using {API_PRODUCTION_ORDER_2_SRV as ProdOrderExt} from '../srv/external/API_PRODUCTION_ORDER_2_SRV';
+using {API_PRODUCT_SRV as ProductExt} from '../srv/external/API_PRODUCT_SRV';
+
+
+entity Materials        as
+    projection on ProductExt.A_Product {
+        Product,
+        CreationDate,
+        ProductType,
+        ProductGroup,
+        to_Valuation,
+        to_ProductProcurement,
+        to_Description
+    }
 
 /**
  * Local materials master — supplements remote S/4 stock data with things
@@ -16,7 +29,7 @@ using {API_PRODUCTION_ORDER_2_SRV as ProdOrderExt} from '../srv/external/API_PRO
  * Actual quantities-on-hand come from the remote API_MATERIAL_STOCK_SRV service,
  * NOT from this entity — this is deliberately not a stock duplicate.
  */
-entity Materials        as
+entity MaterialStock    as
     projection on MaterialExt.A_MatlStkInAcctMod {
         Material,
         Plant,
@@ -35,6 +48,9 @@ entity Materials        as
         productionOrders : Association to many ProductionOrders
                                on productionOrders.Material = Material
     }
+    where
+            Material is not null
+        and Material !=     ''; // filter out the "dummy" material that S/4 sometimes returns
 
 /**
  * A production order for a finished machine/product.
@@ -53,51 +69,6 @@ entity ProductionOrders as
         OrderIsCreated,
         OrderIsTechnicallyCompleted,
         OrderIsClosed,
-        materials : Association to many Materials
-                        on materials.Material = Material
+        materialStock : Association to many MaterialStock
+                            on materialStock.Material = Material
     }
-
-entity ProductionOrderComponents : cuid {
-    order            : Association to ProductionOrders;
-    material         : Association to Materials @mandatory;
-    quantityRequired : Integer                  @mandatory;
-}
-
-/**
- * Config for the deterministic auto-order boundary. Value-based (cost), not quantity-based —
- * 500 units of a €0.01 screw is nothing; 5 units of a €10,000 motor is a big deal.
- * Kept as a single-row/category config, not hardcoded in application logic.
- */
-entity AutoOrderPolicy : cuid {
-    category            : String(20)     @mandatory; // matches Materials.category, or 'default'
-    autoOrderLimitValue : Decimal(10, 2) @mandatory; // max shortfall COST auto-orderable without approval
-}
-
-/**
- * Created only when a shortfall exceeds the auto-order limit.
- * The LLM writes riskLevel / recommendedActions / reasoning — nothing else on this entity
- * is LLM-generated; shortfallQty and shortfallValue are computed in code.
- */
-entity Escalations : cuid, managed {
-    productionOrder    : Association to ProductionOrders @mandatory;
-    component          : Association to Materials        @mandatory;
-    shortfallQty       : Integer                         @mandatory;
-    shortfallValue     : Decimal(10, 2);
-    riskLevel          : String(10); // low, medium, high — LLM-assessed
-    recommendedActions : LargeString; // LLM structured output, stored as JSON string
-    reasoning          : LargeString; // LLM's explanation
-    status             : String(20) default 'pending-approval'; // pending-approval, approved, rejected
-    rejectionReason    : String(200); // required when status = rejected
-}
-
-/**
- * The actual replenishment record — whether created automatically or after human approval.
- * `source` is the audit trail distinguishing agent autonomy from human decision.
- */
-entity PurchaseOrders : cuid, managed {
-    material   : Association to Materials @mandatory;
-    quantity   : Integer                  @mandatory;
-    escalation : Association to Escalations; // null when auto-ordered directly, no escalation needed
-    status     : String(20) default 'created'; // created, sent, confirmed
-    source     : String(20)               @mandatory; // 'agent-auto' or 'human-approved'
-}

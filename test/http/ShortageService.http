@@ -6,7 +6,7 @@
 
 ### Materials
 # @name Materials_GET
-GET {{server}}/odata/v4/shortage/Materials?$expand=productionOrders
+GET {{server}}/odata/v4/shortage/Materials
 Authorization: Basic {{username}}:{{password}}
 
 
